@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+  "name": "Ringo Star",
+  "number": "1-2-3-4"
+}

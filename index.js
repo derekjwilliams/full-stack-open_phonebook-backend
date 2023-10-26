@@ -40,6 +40,40 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+const generateRandomId = () => {
+  return Math.round(Number.MAX_SAFE_INTEGER * Math.random())
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    const messages = []
+    if (!body.name) messages.push('name missing')
+    if (!body.number) messages.push('number missing')
+
+    return response.status(400).json({
+      error: messages.join(', '),
+    })
+  }
+
+  if (persons.find((person) => person.name === body.name)) {
+    return response.status(403).json({
+      error: 'name must be unique',
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateRandomId(),
+  }
+
+  persons = persons.concat(person)
+  console.log(person)
+  response.json(person)
+})
+
 app.get('/info', (request, response) => {
   response.send(
     `<html><p>Phonebook has info for ${
